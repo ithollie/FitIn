@@ -1,0 +1,55 @@
+package passanger;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import user.BleepPassanger;
+
+public class Passangers {
+	
+	public Node first;
+	public BleepPassanger passanger;
+	public ArrayList<String> arrayList;
+	public int  countPassangers;
+	
+	public Passangers() {
+		this.first = null;
+		this.countPassangers = 0;
+	}
+	
+	public void insertPassager(BleepPassanger passanger, HashMap<String, String> passanger1Array) {
+		Node  current = first;
+		if(current == null) {
+			Node newNode =  new Node(passanger.name, passanger.lastname,passanger.password, passanger.driver_lis, passanger.id, passanger.state, passanger.hashMapArray);
+			first  = newNode;
+			countPassangers++;
+		}
+		if (current != null) {
+			Node newNode =  new  Node(passanger.name, passanger.lastname, passanger.password, passanger.driver_lis, passanger.id, passanger.state, passanger.hashMapArray);
+			newNode.nextNode =  first;
+			first =  newNode;
+			countPassangers++;
+		}
+	}
+	
+	public   void displayPassangers() {
+		Node  current = first;
+		while(current != null) {
+				System.out.println(" ");
+				System.out.println("[ " +" First name " + "  " + current.name);
+				System.out.println("Lastname is " + " " + current.lastname);
+	
+				System.out.println("driver's  licence "+ " " + current.passanger_lis);
+				System.out.println("driver's id " +  " " + current.passanger_id);
+				System.out.println("driver's password " + " " + current.password + " ]");
+				
+				current = current.nextNode;
+				
+			}	
+	}
+	public   void displayCount() {
+		System.out.println("count = "+countPassangers);
+		
+				
+	
+	}
+}

@@ -1,0 +1,75 @@
+import user.BleepDriver;
+import user.BleepPassanger;
+
+import java.util.Scanner;
+
+import avaliableDrivers.DriverLogin;
+import avaliableDrivers.Drivers;
+import gui.GuiClass;
+import passanger.PassangerLogin;
+import passanger.Passangers;
+
+import  helper.Helper;
+
+public class main {
+
+	public static void main(String[] args) {
+		GuiClass g =  new GuiClass();
+		Scanner scan = null;
+	
+		//drivers
+		BleepDriver driver1 = new BleepDriver("Ibrahim", "Thollie", "password1","ithollie@yahoo.com" , 694144, "121" , "Crysler 200 c", "Crysler ",  "200", "red" , "226 Wright Avenue  Darby ","Pennsyhivain","19023");
+		
+		//driver object
+		Drivers  driversLinkedList = new Drivers(driver1);
+		driversLinkedList.insertDriver();
+
+		// Beep passengers
+		BleepPassanger passanger1 = new BleepPassanger("james", "john","ithollie@yahoo.com12", "password1","1233",6941,"Pa");
+		
+		
+		// Beep object
+		Passangers  passangesLinkedList = new Passangers();
+		passangesLinkedList.insertPassage(passanger1);
+		
+		System.out.println("<---- Drivers ---->");
+		driversLinkedList.displayDrivers();
+		
+		System.out.println("<---- Passangers -- >");
+		System.out.println(" ");
+		passangesLinkedList.displayPassangers();
+		
+		System.out.println("the count is " + driversLinkedList.countDrivers);
+		System.out.println(" |------ ----------|");
+		
+		System.out.println("Enter  0 to login as a Driver or 1 as  a passager");
+		scan = new Scanner(System.in);
+		
+		int  cts = scan.nextInt();
+		switch(cts) {
+		case 0:
+			if(cts == 0) {
+				if((cts > -1 ) && ( cts < 1) ) {
+					Helper helper =  new  Helper();
+					helper.driver("0", driversLinkedList);
+				}
+			}
+			break;
+		case 1:		
+			if (cts == 1) {
+					if((cts > 0 ) && ( cts < 2) ) {
+							Helper  helper  =  new  Helper();
+							helper.passanger("1",passangesLinkedList,driversLinkedList );
+						}
+			}
+			break;
+			default:;
+				System.out.println("please enter a number between  0  and 1");
+			break;
+		
+		}
+		scan.close();
+		
+	}
+
+}

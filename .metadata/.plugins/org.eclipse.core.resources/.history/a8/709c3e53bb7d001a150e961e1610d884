@@ -1,0 +1,162 @@
+package helper;
+
+import java.util.Scanner;
+import java.util.Random;
+
+import avaliableDrivers.DriverLogin;
+import avaliableDrivers.Drivers;
+import avaliableDrivers.Register;
+import drivers.DriveClass;
+import passanger.PassangerLogin;
+import passanger.Passangers;
+
+
+public class Helper {
+	
+	private static final int Integer = 0;
+	public Scanner scan;
+	public Scanner user;
+	
+	public Helper() {
+		this.scan = new Scanner(System.in);
+		this.user = new Scanner(System.in);
+
+	}
+	public boolean  condition(String reg) {
+		boolean value = false;
+		
+		for(int  i  = 0; i  < reg.length() ;  i++) {
+			if(reg.charAt(i) < 40) {
+				value = true;
+			}
+			
+		}
+		return value;
+	}
+	public  void driver(String cts , Drivers registerDriversLinkedList) {
+		boolean condition  = true;
+		
+		if(java.lang.Integer.parseInt(cts) == 0  &&  condition ==  true) {
+			System.out.println("Enter driver  id and password to login as a driver");
+			
+			System.out.println("Enter driver's  id");
+			String id_driver = scan.nextLine();
+			
+			System.out.println("Enter driver's password");
+			String driver_password = scan.nextLine();
+			
+			DriverLogin login =  new DriverLogin(id_driver.toString(),driver_password.toString(), registerDriversLinkedList);
+			
+			int driver_id =  (id_driver.charAt(0) != 1 )? id_driver.charAt(0):1;
+			
+			boolean  id_key =   (!id_driver.isEmpty())?true:false;
+			boolean  password_key = (!driver_password.isEmpty())?true:false;
+			
+			boolean id_num = (id_driver.charAt(0) > 40)?true:false;
+			boolean id_len = (id_driver.length() > 0 )?true:false;
+			boolean password_len =  (driver_password.length() > 0)?true:false;
+			
+			if(id_num == true && (id_key && password_key) == true && id_len == true && password_len == true) {
+				
+				System.out.println("user id =" + login.checkUser(driver_id) + " " + "user password  =" + login.checkPass(driver_password));
+
+				if(login.checkUser(id_driver) ==  true && login.checkPass(driver_password) ==  true) {
+					login.access();
+				}else {
+					try {
+						Random rand = new Random();
+						int rand_int1 = rand.nextInt(200);
+						System.out.println("new  generated id " +  rand_int1);
+						
+						System.out.println("You are not a valiable user please register");
+						System.out.println(" ");
+
+						System.out.println("Enter user first name");
+						String firstname = scan.nextLine();
+						
+						System.out.println("Enter  user lastname");
+						String lastname  = scan.nextLine();
+						
+						System.out.println("Enter  user email");
+						String email  = scan.nextLine();
+						
+						System.out.println("Enter  user password");
+						String password  = scan.nextLine();
+						 
+						System.out.println("Enter user home address");
+						String address = scan.nextLine();
+						
+						System.out.println("Enter user  state");
+						String state  =  scan.nextLine();          
+						
+						System.out.println("Enter zip code");
+						String zip = scan.nextLine();
+						
+						System.out.println("Enter driver's lic");
+						String driver_lic = scan.nextLine();
+						
+						
+						DriveClass  extra  = new DriveClass(rand_int1,registerDriversLinkedList);
+						
+						if(!firstname.isEmpty() && !lastname.isEmpty() && !email.isEmpty() && !password.isEmpty() &&  !address.isEmpty() && !state.isEmpty() && !zip.isEmpty() &&  !driver_lic.isEmpty()) {
+							if(extra.checkUser(rand_int1) == false) {
+								avaliableDrivers.Register  register = new Register(rand_int1, firstname ,  lastname, email, password,address, state,  zip,   registerDriversLinkedList);
+								register.userRegistration("Enter car information","Thank you for completing the first section of the registration process",  driver_lic );
+							}else {
+								System.out.println("user already  taken");
+							}
+						}else {
+							System.out.println("user id or password is empty or dont meet the critirial");
+							
+						}
+						
+					
+					}catch(Exception e) {
+						System.out.println(e.toString());
+					}finally{
+						if(scan !=  null) {
+							scan.close();
+						}
+						
+					}
+					
+					
+				}
+						
+			}else {
+				System.out.println("There is an  error in  id check");
+			}
+		}else {
+			System.out.print("Error in   driver  function");
+		}
+	}
+	public void passanger(String  cts, Passangers passangesLinkedList, Drivers driversLinkedList) {
+			boolean   condition = true;
+	
+			if (java.lang.Integer.parseInt(cts) == 1 && condition == true) {
+				System.out.println("Enter passanger id and password to   login  as a passanger");
+				
+				System.out.println("Enter user id");
+				String passanger_id = scan.nextLine();
+				
+				System.out.println("Enter user password");
+				String passanger_password = scan.nextLine();
+				
+				if(passanger_id.length() >  0 && passanger_password.length() > 0){
+					PassangerLogin  passangerlogin = new PassangerLogin(passanger_id,passanger_password, driversLinkedList, passangesLinkedList);	
+					
+					if(passangerlogin.checkUser() == true && passangerlogin.checkPass() == true) {
+						
+						passangerlogin.access();			
+					}else {
+						System.out.println("The user  is already  taken");
+					}
+					
+				}else {
+					System.out.println("There is an  error in  the length check");
+				}
+			}else {
+				System.out.println("An  Error has happened");
+			}
+	}
+}

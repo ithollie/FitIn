@@ -1,0 +1,54 @@
+package user;
+
+public class BleepDriver {
+	public String name;
+	public String  lastname;
+	public String  email;
+	public String  password;
+	
+	public String id;
+	public String carname; 
+	public String make;
+	public String modal;
+	public String state;
+	public String address;
+	public String zip;
+	public String car_color;
+	
+	public int driver_lic;
+	
+	public  BleepDriver(String name, String  lastname, String password, String email,int driver_lic,String id , String carname , String make,  String modal, String car_color, String address, String state,  String zip) {
+		
+		this.name = name;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.driver_lic = driver_lic;
+		this.id			= id;
+		this.carname 	= carname;
+		this.make 		= make;
+		this.modal		= modal;
+		this.address	= address;
+		this.state		= state;
+		
+		this.car_color  = car_color;
+	}
+	
+	public int  insert(int num) {
+		return 0;
+	}
+	
+	public   void display() {
+		System.out.println("[");
+		
+		System.out.println( name);
+		System.out.println( lastname);
+		System.out.println( email);
+		System.out.println(  driver_lic);
+		
+		System.out.println( make);
+		System.out.println( modal);
+		System.out.println(  state);
+		System.out.println("]");
+	}
+}

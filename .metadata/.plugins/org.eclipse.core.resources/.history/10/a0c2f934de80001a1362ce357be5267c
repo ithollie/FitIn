@@ -1,0 +1,105 @@
+import user.BleepDriver;
+import user.BleepPassanger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import avaliableDrivers.DriverLogin;
+import avaliableDrivers.Drivers;
+import gui.GuiClass;
+import passanger.PassangerLogin;
+import passanger.Passangers;
+
+import  helper.Helper;
+
+public class main {
+
+	public static void main(String[] args) {
+		GuiClass g =  new GuiClass();
+		Scanner scan = null;
+	
+		//drivers
+		HashMap<String, String> driver1Array = new HashMap<String, String>();
+		BleepDriver driver1 = new BleepDriver("Ibrahim", "Thollie", "password1","ithollie@yahoo.com" , 69414433, "1218" , "Crysler 200 c", "Crysler ",  "200", "red" , "226 Wright Avenue  Darby ","Pennsyhivain","19023");
+		driver1Array.put("fullName",driver1.name + " " + driver1.lastname);
+		driver1Array.put("card_number", "353453454453");
+		driver1Array.put("expiration_date","10/2020");
+		driver1Array.put("code","6941");
+		
+		HashMap<String , String> driver2Array = new HashMap<String, String>();
+		BleepDriver driver2 = new BleepDriver("Ibrahim", "kamara", "password112","kamara@ithollie@yahoo.com" , 69414422, "1219" , "Crysler 200 c", "Crysler ",  "200", "red_green" , "226 Wright Avenue  philadelphia ","Pennsyhivain","190263");
+
+		driver2Array.put("fullName",driver2.name + " " + driver2.lastname);
+		driver2Array.put("card_number", "4053453454453");
+		driver2Array.put("expiration_date","10/2020");
+		driver2Array.put("code","6991");
+		
+		//Beep driver object insert
+		Drivers  driversLinkedList = new Drivers();
+		driversLinkedList.insertDriver(driver1, driver1Array);
+		driversLinkedList.insertDriver(driver2, driver2Array);
+
+		//Beep passengers object
+		HashMap<String, String> passangerHashMap = new HashMap<String, String>();
+		BleepPassanger passanger1 = new BleepPassanger("james", "john","ithollie@yahoo.com12", "password1","1233",6941,"Pa",null);
+		passangerHashMap.put("fullName",passanger1.name + " " + passanger1.lastname);
+		passangerHashMap.put("card_number", "393453454453");
+		passangerHashMap.put("expiration_date","10/2022");
+		passangerHashMap.put("code","6942");
+		passanger1.setMapArray(passangerHashMap);
+		
+		HashMap<String, String> passanger2Array = new HashMap<String, String>();
+		BleepPassanger passanger2 = new BleepPassanger("mohamed", "kamara","ithollie@yahoo.com12e", "password1","12332",69412,"ca",null);
+		passanger2Array.put("fullName",passanger2.name + " " + passanger2.lastname);
+		passanger2Array.put("card_number", "393473454453");
+		passanger2Array.put("expiration_date","10/2023");
+		passanger2Array.put("code","6949");
+		passanger2.setMapArray(passanger2Array);
+
+		// Beep object
+		Passangers  passangesLinkedList = new Passangers();
+		passangesLinkedList.insertPassager(passanger1, passangerHashMap);
+		passangesLinkedList.insertPassager(passanger2, passanger2Array);
+			
+		System.out.println("<---- Drivers ---->");
+		driversLinkedList.displayDrivers();
+		
+		System.out.println("<---- Passangers -- >");
+		System.out.println(" ");
+		passangesLinkedList.displayPassangers();
+		
+		System.out.println("the count is " + driversLinkedList.countDrivers);
+		System.out.println(" |------ ----------|");
+		
+		System.out.println("Enter  0 to login as a Driver or 1 as  a passager");
+		scan = new Scanner(System.in);
+		
+		int  cts = scan.nextInt();
+		switch(cts) {
+		case 0:
+			if(cts == 0) {
+				if((cts > -1 ) && ( cts < 1) ) {
+					Helper helper =  new  Helper();
+					helper.driver("0", driversLinkedList);
+				}
+			}
+			break;
+		case 1:		
+			if (cts == 1) {
+					if((cts > 0 ) && ( cts < 2) ) {
+							Helper  helper  =  new  Helper();
+							helper.passanger("1",passangesLinkedList,driversLinkedList );
+						}
+			}
+			break;
+			default:;
+				System.out.println("please enter a number between  0  and 1");
+			break;
+		
+		}
+		scan.close();
+		
+	}
+
+}

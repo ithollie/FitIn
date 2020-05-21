@@ -1,0 +1,251 @@
+package passanger;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+import avaliableDrivers.Drivers;
+
+public class PassangerLogin{
+	
+	public String passanger_id;
+	public String passanger_password;
+	public String location;
+	
+	int sent_requests;
+	public Drivers driverLinkedList;
+	public Passangers passangerListObject;
+	
+	
+	public PassangerLogin(String  passanger_id, String  passanger_password, Drivers driverLinkedList,Passangers passangerLinkedList, String location) {
+		this.passanger_id   = passanger_id;
+		this.passanger_password  =  passanger_password;
+		this.driverLinkedList = driverLinkedList;
+		this.passangerListObject =  passangerLinkedList;
+		this.sent_requests  = 0;
+		this.location = location;	
+	}
+	public  String[] searchPassanger(int passanger_id2) {
+		String[] st  =  new  String[3];
+		
+		Node current = passangerListObject.first;
+		while(current != null) {
+			if(Integer.parseInt(current.passanger_id) == passanger_id2) {
+				st[0] = current.name;
+				st[1] = current.lastname;
+				st[2] = current.passanger_id;
+			}
+			current  =  current.nextNode;
+		}
+		return st;
+				
+	}
+	public boolean checkUser() {
+		Node  current  =  passangerListObject.first;
+		boolean value =  false;
+		while(current != null) {
+			if(Integer.parseInt(current.passanger_id) == Integer.parseInt(passanger_id)) {
+				value =  true;
+				break;
+			}
+			current  = current.nextNode;
+		}
+		return value;
+	}
+	public boolean checkPass() {
+		Node  current  =  passangerListObject.first;
+		boolean value =  false;
+		while(current != null) {
+			if(current.password.equals(passanger_password)) {
+				value =  true;
+				break;
+			}
+			current  = current.nextNode;
+		}
+		return value;
+	}
+	public boolean linkedListCheck() {
+		Node  current  =  passangerListObject.first;
+		boolean value =  false;
+		while(current.nextNode != null) {
+			if(Integer.parseInt(current.passanger_id) == Integer.parseInt(passanger_id)) {
+				if(current.map.isEmpty()) {
+					value =  true;
+				}
+			}
+			current  = current.nextNode;
+		}
+		return value;
+	}
+	public void setterRequestCount() {
+		sent_requests++;
+	}
+	public void access(Passangers passangesLinkedList,int passanger_id) {
+		System.out.println("Passager  access is granted and thank  you passanger  " + " " + passanger_id);
+		System.out.println("Avaliable Drivers or online drivers");
+		System.out.println("<----------------------->");
+		displayDrivers();
+
+		Scanner  scan =  null;
+		
+		File file =  new File("C:/test/database.txt");
+		try {
+			scan = new  Scanner(System.in);
+			System.out.println("Enter a driver's id to send a request");
+			String  driver_id  = scan.nextLine();
+			
+			searchforDriverDisplay(driver_id);
+			
+			if(searchforDriver(driver_id) ==  Integer.parseInt(driver_id)) {
+					System.out.println("please enter bank information or credit card to pay  for the ride");
+					Scanner scans =  null;
+					if(linkedListCheck() == false) {
+						
+						scans = new Scanner(System.in);
+			
+						System.out.println("Enter  name on  the card");
+						String  username = scans.nextLine();
+						
+						System.out.println("Enter card number");
+						String  card_number = scans.nextLine();
+						
+						System.out.println("Enter  expiration data on  the card");
+						String  expiration_date = scans.nextLine();
+						
+						System.out.println("Enter security code");
+						String  security_code = scans.nextLine();
+						
+						Double card_num = new Double(card_number);
+						
+						//extra check
+						if(!username.isEmpty() && !card_number.isEmpty()  && !expiration_date.isEmpty() && !security_code.isEmpty()) {	
+							if(card_num.isNaN() == true) {
+								paymentDetails(passanger_id);
+								setterRequestCount();
+								System.out.println("you  are about to  send a request to driver  id number " + " "+ Integer.parseInt(driver_id));
+								System.out.println("Request  sent " + " " +  sent_requests);
+								sendRequest(driver_id.toString(), searchPassanger(passanger_id));
+							}else {
+								System.out.println("enter a valiable card number");
+							}
+						}else{
+							System.out.print("Card information  good");
+						}
+					
+			
+		
+				    
+					
+					}else {
+						paymentDetails(passanger_id);
+						setterRequestCount();
+						System.out.println("you  are about to  send a request to driver  id number " + " "+ Integer.parseInt(driver_id));
+						System.out.println("Request  sent " + " " +  sent_requests);
+						sendRequest(driver_id.toString(), searchPassanger(passanger_id));
+			
+					}
+			}else {
+				System.out.println("something went wrong");
+			}
+		}catch(Exception e) {
+			System.out.println("The error " + e.toString());
+		}finally {
+			if(scan != null) {
+				scan.close();
+			}
+		}
+	}
+		
+	public 	void paymentDetails(int passanger_id) {
+		passanger.Node passangerCurrent =  passangerListObject.first;
+		while(passangerCurrent  != null) {
+			if(java.lang.Integer.parseInt(passangerCurrent.passanger_id) == passanger_id) {
+				System.out.println("<----------- passanger bank  details --------- >");
+				System.out.println(passangerCurrent.map.get("fullName"));
+				System.out.println(passangerCurrent.map.get("card_nuber"));
+				System.out.println(passangerCurrent.map.get("expiration_date"));
+				System.out.println(passangerCurrent.map.get("code"));
+				System.out.println("------------------------------------------------");
+			}
+			passangerCurrent =passangerCurrent.nextNode;
+		}
+	}
+	public void sendRequest(String  driverKey, String[] passangerInformation) throws FileNotFoundException {		
+		
+		avaliableDrivers.Node current = driverLinkedList.first;
+		passanger.Node passangerCurrent =  passangerListObject.first;
+		
+		File file  = null;
+		
+		file =  new File("C:/test/database.txt");
+		PrintWriter  pw  = new  PrintWriter(file);
+		
+		try {
+			while(current != null) {
+				if(driverKey.equals(current.driver_id) == true) {
+						current.received_requests[0][0] = passangerInformation[0];
+						current.received_requests[0][1] = passangerInformation[1];
+						current.received_requests[0][2] = passangerInformation[2];
+								
+						pw.println(current.received_requests[0][0]);
+						pw.println(current.received_requests[0][1]);
+						pw.println(current.received_requests[0][2]);
+						
+				}
+				current = current.nextNode;
+			}
+			
+		}catch(Exception e) {
+			System.out.println(e.toString());
+		}finally {
+			if(pw != null) {
+				pw.close();
+			}
+		}
+		System.out.println("request sent " + " to " + " " + current.driver_id + " by " + current.received_requests[0][0] + " " + current.received_requests[0][1]);
+		System.out.println("Your location have been  sent to the driver")
+	}
+	public int searchforDriver(String key){
+		avaliableDrivers.Node  current = driverLinkedList.first;
+		int value = -1;
+		while(current.nextNode != null) {
+			if(Integer.parseInt(current.driver_id) ==  Integer.parseInt(key)) {
+				return  Integer.parseInt(current.driver_id);
+			}
+			current =  current.nextNode;
+		}
+		return value;
+	}
+	public  void   displayDrivers() {
+		avaliableDrivers.Node current  = driverLinkedList.first;
+		while(current != null) {
+			System.out.println("[");
+			System.out.println("Driver's name " + current.name + " "+ current.lastname);
+			System.out.println("Driver's email  address" + current.email); 
+			System.out.println("Driver's id " + current.driver_id);
+			System.out.println("]");
+			current =  current.nextNode;
+		}
+	}
+
+	public void searchforDriverDisplay(String driverKey){
+		avaliableDrivers.Node  current = driverLinkedList.first;
+		
+		while(current != null) {
+			if(current.driver_id.equals(driverKey)) {
+				System.out.println("___Driver's information___");
+				System.out.println("Driver's name" + " " +current.name);
+				System.out.println("Driver's lastname " + " " +current.lastname);
+				System.out.println("Driver's car make " + " " +current.make);
+				System.out.println("Driver's car modal " + " " +current.modal);
+				System.out.println("Driver's state " + " " +current.state);
+				System.out.println("Driver's car color " + " " +current.car_color);
+				System.out.println("payment  information" + " " + current.arrayList.get("fullName"));
+				System.out.println("___________________");
+			}
+			current =  current.nextNode;
+		}
+		
+	}
+}
